@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N3M351D4 - Variant 4: Holographic</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(45deg, #000, #1a0033, #000);
+            color: #fff;
+            font-family: 'Orbitron', monospace;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .holographic-title {
+            font-size: 4.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin: 2rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff, #00ffff);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: holographic-shift 3s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+        }
+        
+        @keyframes holographic-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #00ffff;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 15px #00ffff;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .tagline {
+            text-align: center;
+            font-size: 1rem;
+            color: #ff00ff;
+            text-shadow: 0 0 15px #ff00ff;
+            animation: pulse 2s ease-in-out infinite reverse;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="holographic-title">N3M351D4</div>
+        <div class="subtitle">Red Team Lead • Independent Security Researcher</div>
+        <div class="tagline">Elite hacker • CTF champion • Digital guardian</div>
+    </div>
+</body>
+</html>

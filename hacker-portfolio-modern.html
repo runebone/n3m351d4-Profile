@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N3M351D4 - Ethical Hacker Portfolio</title>
+    
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Inter:wght@400;500;700;800;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #00ff00;
+            overflow-x: hidden;
+            line-height: 1.6;
+            cursor: default;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.98);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 1.5s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .loading-text {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+            min-height: 3rem;
+        }
+        
+        .loading-text::before,
+        .loading-text::after {
+            content: 'LOADING CYBERSPACE...';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .loading-text::before {
+            animation: glitch-1 0.5s infinite;
+            color: #ff00ff;
+            z-index: -1;
+        }
+        
+        .loading-text::after {
+            animation: glitch-2 0.5s infinite;
+            color: #00ffff;
+            z-index: -2;
+        }
+
+        @keyframes cyberPulse {
+            0%, 100% { 
+                opacity: 0.7;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 1;
+                transform: scale(1.05);
+            }
+        }
+
+        .loading-bar {
+            width: 400px;
+            height: 6px;
+            background: rgba(0, 255, 0, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff00, #00ffff, #00ff00);
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        /* Three.js Canvas */
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.2;
+        }
+
+        /* Binary Particles Container */
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        /* Main Content */
+        .content {
+            position: relative;
+            z-index: 10;
+            padding: 4rem 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 3rem;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 5rem;
+            padding: 4rem 0;
+            background: transparent;
+            opacity: 0;
+            transform: translateY(60px);
+            animation: slideUp 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards 0.8s;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #neon-sign {
+            width: 100%;
+            height: 120px;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .glitch-title {
+            font-size: 6rem;
+            font-weight: 900;
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-family: 'Orbitron', monospace;
+            color: #fff;
+        }
+        
+        .glitch-title::before,
+        .glitch-title::after {
+            content: 'N3M351D4';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch-title::before {
+            animation: glitch-1 0.5s infinite;
+            color: #ff00ff;
+            z-index: -1;
+        }
+        
+        .glitch-title::after {
+            animation: glitch-2 0.5s infinite;
+            color: #00ffff;
+            z-index: -2;
+        }
+        
+        @keyframes glitch-1 {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+        
+        @keyframes glitch-2 {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(2px, -2px); }
+            40% { transform: translate(2px, 2px); }
+            60% { transform: translate(-2px, -2px); }
+            80% { transform: translate(-2px, 2px); }
+        }
+
+        @keyframes brokenNeon {
+            0%, 100% { 
+                background-position: 0% 50%;
+                filter: hue-rotate(0deg) brightness(1);
+                opacity: 1;
+                transform: perspective(500px) rotateX(15deg) rotateY(-5deg) scale(1);
+            }
+            10% { 
+                opacity: 0.3;
+                filter: hue-rotate(0deg) brightness(0.3);
+            }
+            20% { 
+                opacity: 1;
+                filter: hue-rotate(0deg) brightness(1.2);
+            }
+            30% { 
+                opacity: 0.7;
+                filter: hue-rotate(0deg) brightness(0.7);
+            }
+            40% { 
+                opacity: 1;
+                filter: hue-rotate(0deg) brightness(1);
+            }
+            50% { 
+                background-position: 100% 50%;
+                filter: hue-rotate(180deg) brightness(1.1);
+                transform: perspective(500px) rotateX(15deg) rotateY(-5deg) scale(1.02);
+            }
+            60% { 
+                opacity: 0.4;
+                filter: hue-rotate(180deg) brightness(0.4);
+            }
+            70% { 
+                opacity: 1;
+                filter: hue-rotate(180deg) brightness(1.3);
+            }
+            80% { 
+                opacity: 0.6;
+                filter: hue-rotate(180deg) brightness(0.6);
+            }
+            90% { 
+                opacity: 1;
+                filter: hue-rotate(180deg) brightness(1);
+            }
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #00ffff;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px #00ffff;
+            letter-spacing: 0.05em;
+            text-align: center;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .header .tagline {
+            font-size: 1.2rem;
+            color: #ff00ff;
+            font-weight: 700;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.5;
+            text-shadow: 0 0 10px #ff00ff;
+            letter-spacing: 0.02em;
+            text-align: center;
+            font-family: 'Orbitron', monospace;
+        }
+
+        /* Section Headers */
+        .section-header {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3rem;
+            font-weight: 800;
+            color: #00ff00;
+            text-align: center;
+            margin: 5rem 0 4rem 0;
+            position: relative;
+            text-shadow: 
+                0 0 20px rgba(0, 255, 0, 0.6),
+                0 0 40px rgba(0, 255, 0, 0.3);
+
+            opacity: 0;
+            transform: translateY(40px);
+            animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .section-header::after {
+            content: '';
+            display: block;
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(90deg, #00ff00, #00ffff);
+            margin: 1.5rem auto 0;
+            border-radius: 2px;
+        }
+
+        /* Grid Layout */
+        .modern-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 1.5rem 3rem;
+            margin-bottom: 30px;
+            padding: 2rem 0;
+
+            opacity: 0;
+            transform: translateY(50px);
+            animation: slideUp 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .modern-card {
+            background: rgba(30, 30, 30, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 8px;
+            padding: 0;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 1px 3px rgba(0, 0, 0, 0.12),
+                0 1px 2px rgba(0, 0, 0, 0.24),
+                0 4px 8px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .terminal-header {
+            background: rgba(45, 45, 45, 0.9);
+            backdrop-filter: blur(5px);
+            color: #00ff00;
+            padding: 12px 16px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+            border-radius: 8px 8px 0 0;
+            box-shadow: 
+                0 1px 2px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .terminal-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .terminal-dot:nth-child(1) {
+            background: #ff0000; /* красный */
+        }
+        
+        .terminal-dot:nth-child(2) {
+            background: #ffff00; /* желтый */
+        }
+        
+        .terminal-dot:nth-child(3) {
+            background: #00ff00; /* зеленый */
+        }
+
+        .terminal-content {
+            padding: 20px;
+            color: #00ff00;
+            background: rgba(20, 20, 20, 0.8);
+            border-radius: 0 0 8px 8px;
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .modern-card:hover {
+            border-color: #00ffff;
+            box-shadow: 
+                0 2px 6px rgba(0, 0, 0, 0.15),
+                0 2px 4px rgba(0, 0, 0, 0.12),
+                0 8px 16px rgba(0, 255, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px) scale(1.01);
+            background: rgba(40, 40, 40, 0.9);
+        }
+
+        .modern-card h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #00ff00;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        .modern-card h3 i {
+            color: #00ffff;
+            font-size: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+        }
+
+        .modern-card:hover h3 i {
+            transform: scale(1.2) rotate(360deg);
+            color: #ff0080;
+            text-shadow: 0 0 12px rgba(255, 0, 128, 0.7);
+        }
+
+        .modern-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .modern-card li {
+            padding: 1rem 0;
+            color: #ccffcc;
+            font-size: 1.1rem;
+            font-weight: 500;
+            position: relative;
+            padding-left: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .modern-card li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #00ff00;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+        }
+
+        .modern-card:hover li::before {
+            transform: translateX(8px) scale(1.2);
+            color: #00ffff;
+            text-shadow: 0 0 8px rgba(0, 255, 255, 0.7);
+        }
+
+        .modern-card:hover li {
+            color: #ffffff;
+            transform: translateX(10px);
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Skills Section */
+        .skill-section {
+            background: rgba(30, 30, 30, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 8px;
+            padding: 0;
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 1px 3px rgba(0, 0, 0, 0.12),
+                0 1px 2px rgba(0, 0, 0, 0.24),
+                0 4px 8px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transform: translateY(50px);
+            animation: slideUp 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards 0.8s;
+        }
+
+        .skill-section h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #00ff00;
+            text-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(45, 45, 45, 0.9);
+            backdrop-filter: blur(5px);
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+            border-radius: 8px 8px 0 0;
+            box-shadow: 
+                0 1px 2px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .skill-item {
+            margin: 20px 0;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .skill-name {
+            display: block;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            color: #00ffff;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .skill-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 255, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            box-shadow: 
+                inset 0 1px 2px rgba(0, 0, 0, 0.2),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, rgba(0, 255, 0, 0.85), rgba(0, 255, 255, 0.85));
+            border-radius: 4px;
+            transition: width 2s ease;
+            box-shadow: 
+                0 0 8px rgba(0, 255, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: transparent;
+            padding: 2rem 0;
+            margin: 4rem 0;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: slideUp 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards 1s;
+        }
+
+        .contact-section p {
+            font-size: 1.4rem;
+            margin-bottom: 3rem;
+            color: #ccffcc;
+            text-shadow: 0 0 10px rgba(204, 255, 204, 0.3);
+        }
+
+        .contact-grid {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            background: transparent;
+            border: none;
+            padding: 1rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .contact-item:hover {
+            border-color: #00ff00;
+            background: rgba(0, 255, 0, 0.1);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 255, 0, 0.3);
+        }
+
+        .contact-item i {
+            font-size: 2.5rem;
+            color: #00ffff;
+            margin-bottom: 1.5rem;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover i {
+            transform: scale(1.2);
+            color: #00ff00;
+        }
+
+        .contact-item span {
+            color: #ccffcc;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .contact-item:hover span {
+            color: #00ff00;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-header {
+                font-size: 2.2rem;
+            }
+
+            .modern-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .modern-card {
+                padding: 2.5rem;
+            }
+
+            .skill-section {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loading-screen">
+        <div class="loading-text" id="loading-text"></div>
+        <div class="loading-bar">
+            <div class="loading-progress" id="loading-progress"></div>
+        </div>
+    </div>
+
+    <!-- Three.js Canvas -->
+    <canvas id="three-canvas"></canvas>
+
+    <!-- Binary Particles Container -->
+    <div id="particles-js"></div>
+
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Header -->
+        <div class="header">
+            <div class="container">
+                <div class="glitch-title">N3M351D4</div>
+                <div class="subtitle">Red Team Lead • Independent Security Researcher</div>
+                <div class="tagline">
+                    Elite hacker • CTF champion • Digital guardian
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- About Me -->
+            <div class="modern-grid">
+                <div class="modern-card">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                        </div>
+                        <span>terminal@n3m351d4:~$ whoami</span>
+                    </div>
+                    <div class="terminal-content">
+                        <div>Senior Ethical Hacker with huge experience</div>
+                        <div>Independent Security Researcher</div>
+                        <div>Master's Degree in Information Security (MSTU MIREA)</div>
+                        <div>CTF Team Cult Leader - Standoff competitions</div>
+                        <div>Red Team Operations Specialist</div>
+                        <div>Technical Writer and Security Blogger</div>
+                    </div>
+                </div>
+
+                <div class="modern-card">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                        </div>
+                        <span>terminal@n3m351d4:~$ specializations</span>
+                    </div>
+                    <div class="terminal-content">
+                        <div>Infrastructure Penetration Testing</div>
+                        <div>Web Application Penetration Testing</div>
+                        <div>Red Team Operations & Advanced Threats</div>
+                        <div>Physical Penetration Testing & Wireless Networks</div>
+                        <div>Industrial Control Systems (ICS) Security</div>
+                        <div>Hardware & Radio Security Research</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Skills -->
+            <div class="modern-grid">
+                <div class="modern-card">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                        </div>
+                        <span>terminal@n3m351d4:~$ methodologies</span>
+                    </div>
+                    <div class="terminal-content">
+                        <div>OWASP Testing Methodology</div>
+                        <div>PTES (Penetration Testing Execution Standard)</div>
+                        <div>OSSTMM (Open Source Security Testing Methodology)</div>
+                        <div>NIST Cybersecurity Framework</div>
+                        <div>MITRE ATT&CK Framework</div>
+                        <div>Custom Red Team Playbooks</div>
+                    </div>
+                </div>
+
+                <div class="modern-card">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                        </div>
+                        <span>terminal@n3m351d4:~$ system_administration</span>
+                    </div>
+                    <div class="terminal-content">
+                        <div>Windows Administration & Hardening</div>
+                        <div>Linux Administration & Hardening</div>
+                        <div>Network Security Configuration</div>
+                        <div>Digital Forensics & Incident Response</div>
+                        <div>System Monitoring & Log Analysis</div>
+                        <div>Backup & Disaster Recovery</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skill Progress -->
+            <section class="skill-section">
+                <h2><i class="fas fa-chart-line"></i> terminal@n3m351d4:~$ skills</h2>
+                <div class="skill-item">
+                    <span class="skill-name">Offensive Security</span>
+                    <div class="skill-bar">
+                        <div class="skill-fill" data-width="95%" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">Security Research</span>
+                    <div class="skill-bar">
+                        <div class="skill-fill" data-width="98%" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">Vulnerability Assessment</span>
+                    <div class="skill-bar">
+                        <div class="skill-fill" data-width="90%" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">Custom Tools Development</span>
+                    <div class="skill-bar">
+                        <div class="skill-fill" data-width="88%" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-name">Team Leadership</span>
+                    <div class="skill-bar">
+                        <div class="skill-fill" data-width="92%" style="width: 0%"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Experience -->
+            <div class="modern-grid">
+                <div class="modern-card">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                        </div>
+                        <span>terminal@n3m351d4:~$ current_position</span>
+                    </div>
+                    <div class="terminal-content">
+                        <div>Red Team Lead & Independent Security Researcher</div>
+                        <div>Private penetration testing and security analysis</div>
+                        <div>Advanced threat simulation and red team operations</div>
+                        <div>Security consulting for startups and enterprises</div>
+                        <div>CTF participation and competitive security events</div>
+                        <div>Botnet research and hardware security analysis</div>
+                    </div>
+                </div>
+
+                <div class="modern-card">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                        </div>
+                        <span>terminal@n3m351d4:~$ achievements</span>
+                    </div>
+                    <div class="terminal-content">
+                        <div>Standoff Ambassador - recognized cybersecurity expert</div>
+                        <div>CTF Team Cult Leader - professional team of specialists</div>
+                        <div>Top 1% worldwide in CTF competitions (root-me, TryHackMe)</div>
+                        <div>Author of technical articles and translations</div>
+                        <div>Conference administrator and organizer (DC7499, DC7495)</div>
+                        <div>Security research in ICS and IoT vulnerabilities</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Research -->
+            <div class="modern-grid">
+                <div class="modern-card">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                        </div>
+                        <span>terminal@n3m351d4:~$ current_research</span>
+                    </div>
+                    <div class="terminal-content">
+                        <div>Advanced Persistent Threats (APT) simulation</div>
+                        <div>Botnet research and analysis</div>
+                        <div>Data breach investigation</div>
+                        <div>Vulnerability discovery and exploitation</div>
+                        <div>Hardware reverse engineering projects</div>
+                        <div>Custom security tools development</div>
+                        <div>Threat intelligence and hunting</div>
+                    </div>
+                </div>
+
+                <div class="modern-card">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                        </div>
+                        <span>terminal@n3m351d4:~$ team_cult</span>
+                    </div>
+                    <div class="terminal-content">
+                        <div>Leading professional CTF team</div>
+                        <div>Standoff competitions: 10th → 4th (twice) → 2nd place progression</div>
+                        <div>Collaborative vulnerability research</div>
+                        <div>Training and mentoring team members</div>
+                        <div>Cross-functional security expertise</div>
+                        <div>Knowledge sharing initiatives</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact -->
+            <section class="contact-section">
+                <h2 style="color: #00ffff; text-shadow: 0 0 10px #00ffff; font-family: 'Orbitron', monospace;"><i class="fas fa-envelope"></i> CONTACT INFORMATION</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 1rem; color: #ff00ff; text-shadow: 0 0 10px #ff00ff; font-family: 'Orbitron', monospace; text-align: center; font-weight: 700;">
+                    Ready to secure your systems? Let's connect!
+                </p>
+                <div class="contact-grid">
+                    <a href="https://t.me/inside" class="contact-item">
+                        <i class="fas fa-eye"></i>
+                        <span>INSIDE</span>
+                    </a>
+                    <a href="https://t.me/n3m351d4" class="contact-item">
+                        <i class="fab fa-telegram"></i>
+                        <span>TELEGRAM</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/alexandra-antipina-58371a2a3/" class="contact-item">
+                        <i class="fab fa-linkedin"></i>
+                        <span>LINKEDIN</span>
+                    </a>
+                    <a href="https://github.com/n3m351d4" class="contact-item">
+                        <i class="fab fa-github"></i>
+                        <span>GITHUB</span>
+                    </a>
+                    <a href="https://standoff365.com/profile/33514/" class="contact-item">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>STANDOFF365</span>
+                    </a>
+                </div>
+            </section>
+
+            <div style="height: 100px;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced Loading Animation with Complete Text
+        window.addEventListener('load', function() {
+            let progress = 0;
+            const progressBar = document.getElementById('loading-progress');
+            const loadingScreen = document.getElementById('loading-screen');
+            const loadingText = document.getElementById('loading-text');
+            
+            // Set text immediately
+            loadingText.textContent = 'LOADING CYBERSPACE...';
+            
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 100) progress = 100;
+                
+                progressBar.style.width = progress + '%';
+                
+                // Finish loading
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loadingScreen.style.opacity = '0';
+                        setTimeout(() => {
+                            loadingScreen.style.display = 'none';
+                            initHorizontalSpirals(); // Start spirals after loading
+                        }, 1500);
+                    }, 1000);
+                }
+            }, 80); // Faster animation
+        });
+
+
+        // Initialize Three.js Scene
+        let scene, camera, renderer;
+
+        function initThreeJS() {
+            console.log('Initializing Clean 3D Background...');
+            
+            // Scene
+            scene = new THREE.Scene();
+            scene.fog = new THREE.Fog(0x000000, 50, 300);
+            
+            // Camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 100;
+            
+            // Renderer
+            const canvas = document.getElementById('three-canvas');
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x000000, 0);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            
+            // Clean lighting setup
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.2);
+            scene.add(ambientLight);
+            
+            const spotLight = new THREE.SpotLight(0x00ff00, 1.5, 200);
+            spotLight.position.set(100, 100, 100);
+            spotLight.target.position.set(0, 0, 0);
+            spotLight.angle = Math.PI / 3;
+            scene.add(spotLight);
+            scene.add(spotLight.target);
+            
+            const pointLight = new THREE.PointLight(0x00ffff, 1, 150);
+            pointLight.position.set(-80, 50, -80);
+            scene.add(pointLight);
+            
+            // Start animation
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const time = Date.now() * 0.001;
+            
+            // Smooth scene rotation
+            scene.rotation.x += 0.1;
+            scene.rotation.y += 0.08;
+            
+            // Camera movement
+            camera.position.x = Math.sin(time * 0.3) * 10;
+            camera.position.y = Math.cos(time * 0.5) * 5;
+            
+            // Lighting animation
+            scene.children.forEach(child => {
+                if (child.type === 'SpotLight') {
+                    child.position.x = Math.sin(time * 0.1) * 50;
+                    child.position.z = Math.cos(time * 0.1) * 50;
+                }
+                if (child.type === 'PointLight') {
+                    child.position.x = Math.cos(time * 0.2) * 30;
+                    child.position.y = Math.sin(time * 0.3) * 20;
+                }
+            });
+            
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Initialize horizontal spirals (NO flying digits)
+        function initHorizontalSpirals() {
+            console.log('Creating clean horizontal binary spirals...');
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = 1600;
+            canvas.height = 1000;
+            const ctx = canvas.getContext('2d');
+            
+            // Clean spiral particles ONLY
+            const spiralParticles = [];
+            const particleCount = 300;
+            
+            // Create FIRST spiral (green/cyan ONLY ZEROS)
+            for (let i = 0; i < particleCount; i++) {
+                spiralParticles.push({
+                    angle: (i / particleCount) * Math.PI * 8,
+                    digit: '0', // ONLY zeros for green/cyan spiral
+                    size: Math.random() * 20 + 15,
+                    speed: 0.02,
+                    opacity: Math.random() * 0.8 + 0.2,
+                    color: Math.random() > 0.5 ? '#00ff00' : '#00ffff',
+                    pulsePhase: i * 0.1,
+                    isMirrored: false // First spiral
+                });
+                
+                // SECOND spiral - red/pink ONLY ONES
+                spiralParticles.push({
+                    angle: (i / particleCount) * Math.PI * 8,
+                    digit: '1', // ONLY ones for red/pink spiral
+                    size: Math.random() * 20 + 15,
+                    speed: -0.02, // NEGATIVE speed for reverse direction
+                    opacity: Math.random() * 0.8 + 0.2,
+                    color: Math.random() > 0.5 ? '#ff0080' : '#ff0000',
+                    pulsePhase: i * 0.1,
+                    isMirrored: true // Second spiral - mirrored
+                });
+            }
+
+            // Create background flying stars (hashes and asterisks as stars)
+            let backgroundSymbols = [];
+            const symbolCount = 300; // More stars
+            
+            function initBackgroundSymbols() {
+                backgroundSymbols = [];
+                for (let i = 0; i < symbolCount; i++) {
+                    backgroundSymbols.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        vx: (Math.random() - 0.5) * 2, // Slower horizontal velocity
+                        vy: (Math.random() - 0.5) * 2, // Slower vertical velocity
+                        symbol: Math.random() > 0.5 ? '#' : '*', // Random symbol
+                        opacity: Math.random() * 0.6 + 0.2, // More visible
+                        size: Math.random() * 12 + 8, // Bigger symbols
+                        phase: Math.random() * Math.PI * 2, // Random phase for cycling
+                        amplitude: Math.random() * 20 + 10 // Amplitude for cycling
+                    });
+                }
+            }
+
+            initBackgroundSymbols();
+
+            // Clean HORIZONTAL spiral animation
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                const time = Date.now() * 0.001;
+                
+                // Animate background symbols
+                backgroundSymbols.forEach((symbol) => {
+                    // Update position with cycling motion
+                    symbol.x += symbol.vx;
+                    symbol.y += symbol.vy;
+                    
+                    // Add cycling motion
+                    symbol.phase += 0.02;
+                    const cycleX = Math.sin(symbol.phase) * symbol.amplitude;
+                    const cycleY = Math.cos(symbol.phase * 0.7) * symbol.amplitude * 0.5;
+                    
+                    // Wrap around screen
+                    if (symbol.x < -50) symbol.x = canvas.width + 50;
+                    if (symbol.x > canvas.width + 50) symbol.x = -50;
+                    if (symbol.y < -50) symbol.y = canvas.height + 50;
+                    if (symbol.y > canvas.height + 50) symbol.y = -50;
+                    
+                    // Draw symbol
+                    ctx.save();
+                    ctx.globalAlpha = symbol.opacity;
+                    ctx.font = `bold ${symbol.size}px Monaco, 'Courier New', monospace`;
+                    ctx.fillStyle = '#ffffff'; // White color
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.shadowColor = '#ffffff';
+                    ctx.shadowBlur = 6;
+                    ctx.fillText(symbol.symbol, symbol.x + cycleX, symbol.y + cycleY);
+                    ctx.restore();
+                });
+                
+                spiralParticles.forEach((particle, index) => {
+                    // ROTATION - each particle uses its own speed (positive or negative)
+                    particle.angle += particle.speed;
+                    
+                    // HORIZONTAL SPIRAL mathematics - across the width
+                    const startX = 0;
+                    const startY = canvas.height / 2;
+                    const endX = canvas.width;
+                    const endY = canvas.height / 2;
+                    
+                    // HORIZONTAL radius - use width for horizontal spiral (+66% bigger total)
+                    const maxRadius = (canvas.width / 2) * 1.77;
+                    const spiralRadius = (particle.angle / (Math.PI * 8)) * maxRadius;
+                    
+                    const centerX = startX + ((endX - startX) * spiralRadius) / maxRadius;
+                    const centerY = startY;
+
+                    // Spiral offset perpendicular to horizontal line
+                    const horizontal = Math.atan2(endY - startY, endX - startX);
+                    const perpendicular = horizontal + Math.PI / 2;
+                    
+                    // Calculate wind multiplier (+66% bigger amplitude total)
+                    const windMultiplier = Math.sin(particle.angle * 2) * (120 * 1.77) + 
+                                         Math.cos(particle.angle * 3) * (80 * 1.77);
+                    
+                    // MIRROR LOGIC - first spiral on one side, second spiral mirrored
+                    let mirrorMultiplier = 1;
+                    if (particle.isMirrored) {
+                        mirrorMultiplier = -1;
+                    }
+                    
+                    const finalX = centerX + Math.cos(perpendicular) * windMultiplier * mirrorMultiplier;
+                    const finalY = centerY + Math.sin(perpendicular) * windMultiplier * mirrorMultiplier;
+                    
+                    // PROPER BOUNDARY CHECK - ensure particles stay within screen
+                    if (finalX < 0 || finalX > canvas.width || finalY < 0 || finalY > canvas.height) {
+                        return; // Skip drawing this particle if it's off screen
+                    }
+                    
+                    // Simple pulsing
+                    particle.pulsePhase += 0.05;
+                    particle.currentOpacity = particle.opacity * (0.4 + 0.6 * Math.sin(particle.pulsePhase));
+                    
+                    // Draw spiral digit
+                    ctx.save();
+                    ctx.globalAlpha = particle.currentOpacity;
+                    ctx.font = `bold ${particle.size}px Monaco, 'Courier New', monospace`;
+                    ctx.fillStyle = particle.color;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    
+                    // Simple glow effect - single line spiral
+                    ctx.shadowColor = particle.color;
+                    ctx.shadowBlur = 8;
+                    ctx.fillText(particle.digit, finalX, finalY);
+                    
+                    ctx.restore();
+                });
+                
+                requestAnimationFrame(animateParticles);
+            }
+            
+            // Replace particles container
+            const particlesContainer = document.getElementById('particles-js');
+            particlesContainer.innerHTML = '';
+            particlesContainer.appendChild(canvas);
+            
+            // Start animation
+            animateParticles();
+        }
+
+        // Initialize when page loads
+        initThreeJS();
+        
+        // Animate skill bars when scrolled into view
+        function animateSkillBars() {
+            const skillBars = document.querySelectorAll('.skill-fill');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const skillBar = entry.target;
+                        const targetWidth = skillBar.getAttribute('data-width');
+                        
+                        // Animate to target width over 2 seconds
+                        skillBar.style.transition = 'width 2s ease-out';
+                        skillBar.style.width = targetWidth;
+                        
+                        // Stop observing this element
+                        observer.unobserve(skillBar);
+                    }
+                });
+            }, {
+                threshold: 0.5 // Trigger when 50% of element is visible
+            });
+            
+            skillBars.forEach(bar => {
+                observer.observe(bar);
+            });
+        }
+        
+        // Initialize skill bar animation
+        animateSkillBars();
+        
+        // Glitch title is now handled by CSS animations
+    </script>
+</body>
+</html>
