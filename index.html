@@ -59,7 +59,9 @@
             position: relative;
             min-height: 3rem;
             width: 100%;
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .loading-text::before,
@@ -70,10 +72,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
         
         .loading-text::before {
