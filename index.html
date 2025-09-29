@@ -198,6 +198,12 @@
             color: #fff;
         }
         
+        @media (max-width: 768px) {
+            .glitch-title {
+                font-size: 3rem;
+            }
+        }
+        
         .glitch-title::before,
         .glitch-title::after {
             content: 'N3M351D4';
@@ -588,6 +594,13 @@
             margin-top: 3rem;
             flex-wrap: wrap;
         }
+        
+        @media (max-width: 768px) {
+            .contact-grid {
+                gap: 1.5rem;
+                justify-content: space-around;
+            }
+        }
 
         .contact-item {
             background: transparent;
@@ -728,12 +741,12 @@
                         <span>terminal@n3m351d4:~$ specializations</span>
                     </div>
                     <div class="terminal-content">
-                        <div>Infrastructure Penetration Testing</div>
-                        <div>Web Application Penetration Testing</div>
-                        <div>Red Team Operations & Advanced Threats</div>
-                        <div>Physical Penetration Testing & Wireless Networks</div>
-                        <div>Industrial Control Systems (ICS) Security</div>
-                        <div>Hardware & Radio Security Research</div>
+                        <div>• Infrastructure Penetration Testing</div>
+                        <div>• Web Application Penetration Testing</div>
+                        <div>• Red Team Operations & Advanced Threats</div>
+                        <div>• Physical Penetration Testing & Wireless Networks</div>
+                        <div>• Industrial Control Systems (ICS) Security</div>
+                        <div>• Hardware & Radio Security Research</div>
                     </div>
                 </div>
             </div>
@@ -750,12 +763,12 @@
                         <span>terminal@n3m351d4:~$ methodologies</span>
                     </div>
                     <div class="terminal-content">
-                        <div>OWASP Testing Methodology</div>
-                        <div>PTES (Penetration Testing Execution Standard)</div>
-                        <div>OSSTMM (Open Source Security Testing Methodology)</div>
-                        <div>NIST Cybersecurity Framework</div>
-                        <div>MITRE ATT&CK Framework</div>
-                        <div>Custom Red Team Playbooks</div>
+                        <div>• OWASP Testing Methodology</div>
+                        <div>• PTES (Penetration Testing Execution Standard)</div>
+                        <div>• OSSTMM (Open Source Security Testing Methodology)</div>
+                        <div>• NIST Cybersecurity Framework</div>
+                        <div>• MITRE ATT&CK Framework</div>
+                        <div>• Custom Red Team Playbooks</div>
                     </div>
                 </div>
 
@@ -769,12 +782,12 @@
                         <span>terminal@n3m351d4:~$ system_administration</span>
                     </div>
                     <div class="terminal-content">
-                        <div>Windows Administration & Hardening</div>
-                        <div>Linux Administration & Hardening</div>
-                        <div>Network Security Configuration</div>
-                        <div>Digital Forensics & Incident Response</div>
-                        <div>System Monitoring & Log Analysis</div>
-                        <div>Backup & Disaster Recovery</div>
+                        <div>• Windows Administration & Hardening</div>
+                        <div>• Linux Administration & Hardening</div>
+                        <div>• Network Security Configuration</div>
+                        <div>• Digital Forensics & Incident Response</div>
+                        <div>• System Monitoring & Log Analysis</div>
+                        <div>• Backup & Disaster Recovery</div>
                     </div>
                 </div>
             </div>
@@ -1141,6 +1154,11 @@
                 spiralParticles.forEach((particle, index) => {
                     // ROTATION - each particle uses its own speed (positive or negative)
                     particle.angle += particle.speed;
+                    
+                    // Reset angle for infinite spiral
+                    if (particle.angle > Math.PI * 8) {
+                        particle.angle = 0;
+                    }
                     
                     // HORIZONTAL SPIRAL mathematics - across the width
                     const startX = 0;
